@@ -1,11 +1,11 @@
 from flask import Flask, request, jsonify
+import os
 import hashlib
 import hmac
 
 app = Flask(__name__)
 
-app.config.from_object('config')
-app.secret_key = app.config['SECRET_KEY']
+app.config['BOT_TOKEN'] = os.environ.get('BOT_TOKEN')
 
 def string_generator(data_incoming):
     data = data_incoming.copy()
@@ -33,7 +33,7 @@ def login():
         
         data_check = string_generator(data)
         
-        secret_key = hashlib.sha256(app.config.get('BOT_TOKEN').encode('utf-8')).digest()
+        secret_key = hashlib.sha256(app.config['BOT_TOKEN'].encode('utf-8')).digest()
         
         secret_key_bytes = secret_key
         data_check_string_bytes = bytes(data_check,'utf-8')
